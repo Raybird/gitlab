@@ -1,0 +1,28 @@
+gitlab:
+  image: sameersbn/gitlab
+  ports:
+    - "10022:22"
+    - "10080:80"
+  environment:
+    - GITLAB_HOST=127.0.0.1
+    - GITLAB_PORT=10080
+    - GITLAB_SSH_PORT=1022
+    - GITLAB_SECRETS_DB_KEY_BASE=longandrandomalphanumbericstring
+  volumes:
+    - /srv/docker/gitlab/gitlab:/home/git/data
+  links:
+    - postgresql:postgresql
+    - redis:redisio
+postgresql:
+  image: sameersbn/postgresql
+  environment:
+    - DB_NAME=gitlabhq_production
+    - DB_USER=gitlab
+    - DB_PASS=password
+  volumes:
+    - /srv/docker/gitlab/postgresql:/var/lib/postgresql
+redis:
+  image: sameersbn/redis
+  volumes: 
+    - /srv/docker/gitlab/redis:/var/lib/redis
+
